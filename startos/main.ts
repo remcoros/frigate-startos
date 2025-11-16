@@ -22,10 +22,10 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
         readonly: false,
       })
       .mountDependency({
-        dependencyId: 'bitcoind',
+        dependencyId: 'bitcoind-testnet',
         mountpoint: '/root/.bitcoin',
         volumeId: 'main',
-        subpath: null,
+        subpath: 'testnet4',
         readonly: true,
       }),
     'main',
@@ -45,9 +45,9 @@ export const main = sdk.setupMain(async ({ effects, started }) => {
       exec: {
         // @todo env vars are overriden by Dockerfile defaults: see: https://github.com/Start9Labs/start-os/issues/3050
         //command: sdk.useEntrypoint(),
-        command: ['/opt/frigate/bin/frigate', '-n', 'mainnet'],
+        command: ['/opt/frigate/bin/frigate', '-n', 'testnet4'],
         env: {
-          NETWORK: 'mainnet',
+          NETWORK: 'testnet4',
         },
       },
       ready: {

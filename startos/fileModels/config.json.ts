@@ -2,11 +2,11 @@ import { matches, FileHelper, T } from '@start9labs/start-sdk'
 const { object, string, boolean, oneOf, literal, number } = matches
 
 export const indexStartHeightDefault = 0 // taproot activation height on testnet4
-export const bitcoindUrl = 'http://bitcoind.startos:8332'
+export const bitcoindUrl = 'http://bitcoind-testnet.startos:48332'
 export type ElectrumServerTypes = 'fulcrum' | 'electrs' | 'none'
 export const electrumServers: Record<ElectrumServerTypes, string> = {
-  fulcrum: 'tcp://fulcrum.startos:50001',
-  electrs: 'tcp://electrs.startos:50001',
+  fulcrum: 'tcp://fulcrum-testnet.startos:50001',
+  electrs: 'tcp://electrs-testnet.startos:50001',
   none: '',
 }
 export const electrumServerByUrl = Object.fromEntries(
@@ -33,7 +33,7 @@ export type FrigateConfigType = typeof shape._TYPE
 export const config = FileHelper.json(
   {
     volumeId: 'main',
-    subpath: 'config', // note: no .json extension!
+    subpath: 'testnet4/config', // note: no .json extension!
   },
   shape,
 )

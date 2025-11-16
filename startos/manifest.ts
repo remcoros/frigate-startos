@@ -9,10 +9,10 @@ const architectures =
   BUILD === 'x86_64' || BUILD === 'aarch64' ? [BUILD] : ['x86_64', 'aarch64']
 
 export const manifest = setupManifest({
-  id: 'frigate',
-  title: 'Frigate Electrum Server',
+  id: 'frigate-testnet',
+  title: 'Frigate Electrum Server (testnet4)',
   license: 'Apache 2.0',
-  wrapperRepo: 'https://github.com/remcoros/frigate-startos',
+  wrapperRepo: 'https://github.com/remcoros/frigate-startos/tree/testnet4',
   upstreamRepo: 'https://github.com/sparrowwallet/frigate',
   supportSite: 'https://github.com/sparrowwallet/frigate/issues',
   docsUrl:
@@ -20,7 +20,7 @@ export const manifest = setupManifest({
   marketingSite: 'https://github.com/sparrowwallet/frigate',
   donationUrl: 'https://sparrowwallet.com/donate/',
   description: {
-    short: 'Frigate Electrum Server',
+    short: 'Frigate Electrum Server (testnet4)',
     long: 'Frigate is an experimental Electrum Server testing Silent Payments scanning with ephemeral client keys.',
   },
   volumes: ['main'],
@@ -44,19 +44,19 @@ export const manifest = setupManifest({
     stop: null,
   },
   dependencies: {
-    bitcoind: {
+    'bitcoind-testnet': {
       description: 'Used to subscribe to new block events.',
       optional: false,
       metadata: {
-        title: 'A Bitcoin Full Node',
+        title: 'A Bitcoin Full Node (testnet4)',
         icon: 'https://bitcoin.org/img/icons/opengraph.png',
       },
     },
-    electrs: {
-      description: 'Electrs',
+    'electrs-testnet': {
+      description: 'Electrs (testnet4)',
       optional: true,
       metadata: {
-        title: 'Electrs',
+        title: 'Electrs (testnet4)',
         icon: 'https://github.com/Start9Labs/electrs-startos/blob/master/icon.png?raw=true',
       },
     },

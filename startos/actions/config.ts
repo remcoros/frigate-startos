@@ -19,13 +19,13 @@ const inputSpec = InputSpec.of({
     let serverType: ElectrumServerTypes = 'none'
     let disabled: ElectrumServerTypes[] = []
 
-    if (installedPackages.includes('electrs')) {
+    if (installedPackages.includes('electrs-testnet')) {
       serverType = 'electrs'
     } else {
       disabled.push('electrs')
     }
 
-    if (installedPackages.includes('fulcrum')) {
+    if (installedPackages.includes('fulcrum-testnet')) {
       serverType = 'fulcrum'
     } else {
       disabled.push('fulcrum')

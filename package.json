@@ -1,5 +1,5 @@
 {
-  "name": "frigate",
+  "name": "frigate-testnet",
   "scripts": {
     "build": "rm -rf ./javascript && ncc build startos/index.ts -o ./javascript",
     "prettier": "prettier --write startos",
@@ -7,8 +7,8 @@
   },
   "dependencies": {
     "@start9labs/start-sdk": "^0.4.0-beta.44",
-    "bitcoind-startos": "git+https://github.com/Start9Labs/bitcoind-startos.git#update/040",    
-    "electrs-startos": "git+https://github.com/Start9Labs/electrs-startos.git#update/040",
+    "bitcoind-testnet-startos": "git+https://github.com/remcoros/bitcoind-testnet-startos.git#update/040-testnet4",
+    "electrs-testnet-startos": "git+https://github.com/remcoros/electrs-testnet4-startos.git#update/040-testnet4",
     "fulcrum-startos": "git+https://github.com/linkinparkrulz/fulcrum-startos.git#update/040"
   },
   "devDependencies": {
