@@ -1,7 +1,7 @@
 import { matches, FileHelper, T } from '@start9labs/start-sdk'
 const { object, string, boolean, oneOf, literal, number } = matches
 
-export const indexStartHeightDefault = 709632 // taproot activation height on mainnet
+export const indexStartHeightDefault = 0 // taproot activation height on testnet4
 export const bitcoindUrl = 'http://bitcoind.startos:8332'
 export type ElectrumServerTypes = 'fulcrum' | 'electrs' | 'none'
 export const electrumServers: Record<ElectrumServerTypes, string> = {
