@@ -37,21 +37,19 @@
 | Property      | Value                                                                    |
 | ------------- | ------------------------------------------------------------------------ |
 | Image         | `ghcr.io/remcoros/frigate-docker` (custom image, see frigate-docker repo) |
-| Architectures | x86_64, aarch64 for the default image; x86_64 for AMD                    |
+| Architectures | x86_64, aarch64 for generic; x86_64 for nvidia and amd                   |
 | Entrypoint    | Upstream entrypoint (unmodified)                                         |
 | GPU runtime   | NVIDIA runtime for the NVIDIA variant; OpenCL runtimes in the image      |
 
 Hardware acceleration is declared (`hardwareAcceleration: true`). StartOS variants with hardware requirements select the right runtime:
 
 | StartOS variant | Docker tag suffix | Hardware requirement |
-| ---------------- | ----------------- | -------------------- |
-| `generic`        | none              | none                 |
-| `nvidia`         | none              | NVIDIA GPU           |
-| `intel-i915`     | none              | Intel GPU, i915      |
-| `intel-xe`       | none              | Intel GPU, xe        |
-| `amd`            | `-amd`            | AMD GPU, amdgpu      |
+| --------------- | ----------------- | -------------------- |
+| `generic`       | none              | none                 |
+| `nvidia`        | none              | NVIDIA GPU           |
+| `amd`           | `-amd`            | AMD GPU (amdgpu)     |
 
-The default Docker image bundles Intel OpenCL on x86_64 and supports CPU/NVIDIA/Intel. The AMD variant uses the `-amd` Docker tag with Mesa Rusticl OpenCL (`radeonsi`) bundled.
+The default Docker image bundles Intel OpenCL on x86_64 and supports CPU, NVIDIA (via nvidia variant), and Intel GPUs. The AMD variant uses the `-amd` Docker tag with Mesa Rusticl/radeonsi OpenCL bundled; no ROCm or host driver stack required beyond `amdgpu` and `/dev/dri`.
 
 ---
 
@@ -195,12 +193,6 @@ variants:
   nvidia:
     docker_tag_suffix: null
     gpu_driver: nvidia
-  intel-i915:
-    docker_tag_suffix: null
-    gpu_driver: i915
-  intel-xe:
-    docker_tag_suffix: null
-    gpu_driver: xe
   amd:
     docker_tag_suffix: -amd
     gpu_driver: amdgpu
