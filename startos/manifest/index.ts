@@ -15,6 +15,10 @@ const amdImage = {
   dockerTag: 'ghcr.io/remcoros/frigate-docker:' + FRIGATE_VERSION + '-amd',
 }
 
+const rocmImage = {
+  dockerTag: 'ghcr.io/remcoros/frigate-docker:' + FRIGATE_VERSION + '-rocm',
+}
+
 const imageConfigs = {
   generic: {
     arch: ['x86_64', 'aarch64'],
@@ -28,6 +32,10 @@ const imageConfigs = {
   amd: {
     arch: ['x86_64'],
     source: amdImage,
+  },
+  rocm: {
+    arch: ['x86_64'],
+    source: rocmImage,
   },
 } as const
 
@@ -49,6 +57,15 @@ const deviceRequirements: Record<string, DeviceFilter[]> = {
       vendor: null,
       driver: 'amdgpu',
       description: 'An AMD GPU supported by Mesa Rusticl/radeonsi',
+    },
+  ],
+  rocm: [
+    {
+      class: 'display',
+      product: null,
+      vendor: null,
+      driver: 'amdgpu',
+      description: 'An AMD GPU supported by ROCm (discrete RDNA2/3/4)',
     },
   ],
 }
