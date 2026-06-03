@@ -37,6 +37,10 @@ const dict = {
   'Batch Size': 221,
   'Rows per GPU dispatch (default 300,000). Reduce if scanning hangs on older GPUs.': 222,
   '10M (default)': 223,
+  'Override GFX Version (HSA_OVERRIDE_GFX_VERSION)': 224,
+  'Override the GPU GFX version reported to ROCm/OpenCL. Required for some AMD APUs (e.g. Radeon 780M). Leave empty to use the detected version. Example: 11.0.0': 225,
+  'e.g. 11.0.0': 226,
+  'Must be empty or in the format X.Y.Z (e.g. 11.0.0)': 227,
 } as const
 
 /**

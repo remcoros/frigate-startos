@@ -118,6 +118,21 @@ const inputSpec = InputSpec.of({
         max: null,
         default: 300000,
       }),
+      hsaOverrideGfxVersion: Value.text({
+        name: i18n('Override GFX Version (HSA_OVERRIDE_GFX_VERSION)'),
+        description: i18n(
+          'Override the GPU GFX version reported to ROCm/OpenCL. Required for some AMD APUs (e.g. Radeon 780M). Leave empty to use the detected version. Example: 11.0.0',
+        ),
+        required: false,
+        default: null,
+        placeholder: i18n('e.g. 11.0.0'),
+        patterns: [
+          {
+            regex: '^(\\d+\\.\\d+\\.\\d+)?$',
+            description: i18n('Must be empty or in the format X.Y.Z (e.g. 11.0.0)'),
+          },
+        ],
+      }),
     }),
   ),
 })
@@ -159,6 +174,7 @@ export const setConfig = sdk.Action.withInput(
           : '10M') as '1M' | '5M' | '10M' | '20M' | '50M',
         computeBackend: currentConfig.scan.computeBackend,
         batchSize: currentConfig.scan.batchSize,
+        hsaOverrideGfxVersion: currentConfig.gpu?.hsaOverrideGfxVersion || null,
       },
     }
   },
@@ -186,6 +202,9 @@ export const setConfig = sdk.Action.withInput(
           electrumServers[
             input.electrumServer.selection as ElectrumServerTypes
           ] ?? '',
+      },
+      gpu: {
+        hsaOverrideGfxVersion: input.advanced.hsaOverrideGfxVersion || '',
       },
     })
   },

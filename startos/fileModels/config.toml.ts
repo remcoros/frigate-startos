@@ -64,6 +64,14 @@ const shape = z.object({
     .catch({
       backendElectrumServer: '',
     }),
+  gpu: z
+    .object({
+      hsaOverrideGfxVersion: z.string().catch(''),
+    })
+    .catch({
+      hsaOverrideGfxVersion: '',
+    })
+    .optional(),
 })
 
 export type FrigateConfigType = z.infer<typeof shape>
@@ -102,3 +110,4 @@ export const createDefaultConfig = async (effects: T.Effects) => {
     })
   }
 }
+

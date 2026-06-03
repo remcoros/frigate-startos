@@ -6,7 +6,7 @@ import { i18n } from './i18n'
 export const main = sdk.setupMain(async ({ effects }) => {
   console.info('Starting Frigate...')
 
-  await config.read().const(effects)
+  const conf = (await config.read().const(effects))!
 
   const subcontainer = await sdk.SubContainer.of(
     effects,
@@ -48,6 +48,9 @@ export const main = sdk.setupMain(async ({ effects }) => {
         command: sdk.useEntrypoint(),
         env: {
           NETWORK: 'mainnet',
+          ...(conf.gpu?.hsaOverrideGfxVersion
+            ? { HSA_OVERRIDE_GFX_VERSION: conf.gpu.hsaOverrideGfxVersion }
+            : {}),
         },
         onStdout: (chunk) => {
           const text = Buffer.isBuffer(chunk)
