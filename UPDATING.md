@@ -61,7 +61,6 @@ In `startos/versions/current.ts`:
 
 - Set `FRIGATE_VERSION` to the image tag, without a leading `v`.
 - Set `version` to the **upstream** Frigate release plus a packaging revision — `1.5.3:0` for a new upstream release, or `1.5.3:N+1` when only the image or this package changed.
-- Rewrite `releaseNotes` in all five locales to describe what the user gets.
 
 In `startos/manifest/index.ts`, replace the `sha256:` digest in **both** `defaultSource` and `rocmSource` with the ones resolved above.
 
