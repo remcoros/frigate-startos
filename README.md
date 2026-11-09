@@ -88,6 +88,7 @@ One model, `config.toml`, and the package owns roughly half of it. The other hal
 | `core.authType`                | always `COOKIE`                                                     |
 | `core.dataDir`                 | `/root/.bitcoin`, where Bitcoin's volume is mounted                 |
 | `core.zmqSequenceEndpoint`     | Bitcoin's ZMQ sequence address, resolved live                       |
+| `server.tcp`                   | always `tcp://[::]:50001`, so the listener accepts IPv4 and IPv6    |
 | `server.backendElectrumServer` | the selected backend's address, or empty when none is selected      |
 | `limits.excludedSubnets`       | upstream loopback defaults plus StartOS's current TLS-proxy address |
 
