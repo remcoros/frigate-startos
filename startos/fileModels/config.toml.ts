@@ -1,5 +1,6 @@
 import { z, FileHelper, T } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
+import { electrumPort } from '../utils'
 
 // Upstream's default is 709632, Taproot activation on mainnet.
 export const indexStartHeightDefault = 840000
@@ -27,6 +28,8 @@ export const legacyElectrumServerByUrl: Record<string, ElectrumServerType> = {
   'tcp://fulcrum.startos:50001': 'fulcrum',
   'tcp://electrs.startos:50001': 'electrs',
 }
+
+const tcpListener = `tcp://[::]:${electrumPort}`
 
 // Matches Frigate's native config.toml structure
 const shape = z.looseObject({
@@ -76,9 +79,11 @@ const shape = z.looseObject({
     }),
   server: z
     .looseObject({
+      tcp: z.literal(tcpListener).catch(tcpListener),
       backendElectrumServer: z.string().catch(''),
     })
     .catch({
+      tcp: tcpListener,
       backendElectrumServer: '',
     }),
 })
@@ -114,6 +119,7 @@ export const createDefaultConfig = async (effects: T.Effects) => {
         excludedSubnets: excludedSubnetsForStartosProxy(startosProxyIp),
       },
       server: {
+        tcp: tcpListener,
         backendElectrumServer: '',
       },
     })
