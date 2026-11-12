@@ -20,7 +20,7 @@ import {
 import { store } from './fileModels/store.json'
 import { sdk } from './sdk'
 import { i18n } from './i18n'
-import { electrumPort } from './utils'
+import { electrumPort, stdoutLines } from './utils'
 
 export const main = sdk.setupMain(async ({ effects }) => {
   console.info(i18n('Starting Frigate...'))
@@ -123,25 +123,26 @@ export const main = sdk.setupMain(async ({ effects }) => {
     .addDaemon('primary', {
       subcontainer,
       exec: {
-        command: sdk.useEntrypoint(),
-        env: {
-          NETWORK: 'mainnet',
-        },
-        onStdout: (chunk) => {
-          const text = Buffer.isBuffer(chunk)
-            ? chunk.toString('utf8')
-            : String(chunk)
+        // The SDK calls fn on every respawn, so a restarted Frigate reports nothing until it logs again.
+        fn: async () => {
+          indexing = false
+          lastSyncLog = null
+          return {
+            command: sdk.useEntrypoint(),
+            env: {
+              NETWORK: 'mainnet',
+            },
+            onStdout: stdoutLines((line) => {
+              if (/Indexing \d+ blocks|Block index is up to date/.test(line)) {
+                indexing = true
+              }
 
-          console.log(text)
-
-          if (/Indexing \d+ blocks|Block index is up to date/.test(text)) {
-            indexing = true
-          }
-
-          const match = text.match(/Indexing progress: (.+)/)
-          if (match) {
-            indexing = true
-            lastSyncLog = match[1].trim()
+              const match = line.match(/Indexing progress: (.+)/)
+              if (match) {
+                indexing = true
+                lastSyncLog = match[1].trim()
+              }
+            }),
           }
         },
       },
