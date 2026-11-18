@@ -3,18 +3,17 @@ import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 export const FRIGATE_VERSION = '1.6.1'
 
 export const current = VersionInfo.of({
-  version: '1.6.1:4',
+  version: '1.6.1:5',
   releaseNotes: {
-    en_US:
-      'Requires StartOS 0.4.2 or later. Fixes the sync progress and syncing status, which could occasionally fail to update.',
+    en_US: 'Mitigates Java4Shell (CVE-2026-114938) on affected x86-64 servers.',
     es_ES:
-      'Requiere StartOS 0.4.2 o posterior. Corrige el progreso y el estado de sincronización, que a veces no se actualizaban.',
+      'Mitiga Java4Shell (CVE-2026-114938) en los servidores x86-64 afectados.',
     de_DE:
-      'Erfordert StartOS 0.4.2 oder neuer. Behebt Synchronisierungsfortschritt und -status, die sich gelegentlich nicht aktualisierten.',
+      'Entschärft Java4Shell (CVE-2026-114938) auf betroffenen x86-64-Servern.',
     pl_PL:
-      'Wymaga StartOS 0.4.2 lub nowszego. Naprawia postęp i stan synchronizacji, które czasem się nie aktualizowały.',
+      'Ogranicza podatność Java4Shell (CVE-2026-114938) na podatnych serwerach x86-64.',
     fr_FR:
-      'Nécessite StartOS 0.4.2 ou une version ultérieure. Corrige la progression et l’état de synchronisation, qui ne se mettaient parfois pas à jour.',
+      'Atténue Java4Shell (CVE-2026-114938) sur les serveurs x86-64 concernés.',
   },
   migrations: {
     up: async () => {},

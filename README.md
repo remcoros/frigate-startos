@@ -47,6 +47,8 @@ Upstream publishes no container image, so this package wraps a third-party one t
 | ------------ | --------------------------------------------- |
 | `main`       | The `primary` daemon — the one to `attach` to |
 
+The daemon runs with `JAVA_TOOL_OPTIONS=-XX:-UseBASE64Intrinsics` in every variant, which mitigates Java4Shell (CVE-2026-114938) on x86-64 CPUs with AVX-512 VBMI; ARM64 is not affected. The JVM logs `Picked up JAVA_TOOL_OPTIONS: -XX:-UseBASE64Intrinsics` each time Frigate starts.
+
 The package declares `hardwareAcceleration`, which is what gets `/dev/dri`, `/dev/nvidia*`, and `/dev/kfd` into the container. It ships as three build variants under one package id, and StartOS installs the most hardware-specific one a given server qualifies for:
 
 | Variant   | Image   | Hardware requirement | GPU path                                           |
@@ -94,7 +96,7 @@ One model, `config.toml`, and the package owns roughly half of it. The other hal
 
 `index.startHeight`, `index.cacheSize`, `scan.computeBackend`, and `scan.batchSize` are seeded once and thereafter belong to the **Configure Frigate** action. Those four are watched rather than rewritten: a hand edit survives, and changing any of them — by hand or through the action — restarts Frigate so the new value takes effect, since Frigate never re-reads its config while running.
 
-Any key the package does not name is left alone entirely, including the upstream keys this package exposes no control for. The `limits.excludedSubnets` exception is necessary because StartOS terminates TLS and opens the upstream connection from its `lxcbr0` bridge address, which the package reads with `sdk.getOsIp()` whenever Frigate starts. Without it, Frigate 1.6 would treat every StartOS client as one IP for its new per-IP limits and request pacing.
+Any key the package does not name is left alone entirely, including the upstream keys this package exposes no control for. The `limits.excludedSubnets` exception is necessary because StartOS terminates TLS and opens the upstream connection from its `lxcbr0` bridge address, which the package reads with `sdk.getOsIp()` whenever Frigate starts. Without it, Frigate treats every StartOS client as one IP for per-IP limits and request pacing.
 
 `store.json` records which Electrum backend the user selected. It is deliberately separate from `config.toml`: the backend's actual address is assigned by StartOS and can change, so the selection has to outlive any particular address.
 
@@ -183,7 +185,7 @@ Most of these come from the package taking ownership of the Bitcoin connection a
 4. **A different default start height.** This package indexes from a more recent block than upstream does, to keep the first sync tolerable. The trade-off and how to change it are covered in the Instructions tab.
 5. **The AMD variant is built on ROCm nightlies.** The image pins a nightly ROCm release; it has not been tested by the packager on real AMD hardware.
 6. **Upstream is experimental.** Silent Payments support is still moving, and so is the wallet support for it.
-7. **StartOS manages the Frigate 1.6 proxy exception.** The platform terminates TLS before it reaches Frigate, so the package reads the current bridge address with `sdk.getOsIp()` and includes it in `limits.excludedSubnets`. Do not remove it: otherwise every client through StartOS is treated as the same IP and can hit Frigate's per-IP limits.
+7. **StartOS manages the proxy exception.** The platform terminates TLS before it reaches Frigate, so the package reads the current bridge address with `sdk.getOsIp()` and includes it in `limits.excludedSubnets`. This prevents clients through StartOS from sharing one per-IP limit.
 
 ---
 
@@ -204,6 +206,7 @@ file_models:
   - store.json
 startos_managed_env_vars:
   - NETWORK
+  - JAVA_TOOL_OPTIONS
 dependencies:
   - bitcoind # required; its volume is mounted read-only at /root/.bitcoin
   - fulcrum # optional, recommended

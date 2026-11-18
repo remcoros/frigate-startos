@@ -131,6 +131,8 @@ export const main = sdk.setupMain(async ({ effects }) => {
             command: sdk.useEntrypoint(),
             env: {
               NETWORK: 'mainnet',
+              // Mitigates Java4Shell (CVE-2026-114938).
+              JAVA_TOOL_OPTIONS: '-XX:-UseBASE64Intrinsics',
             },
             onStdout: stdoutLines((line) => {
               if (/Indexing \d+ blocks|Block index is up to date/.test(line)) {
