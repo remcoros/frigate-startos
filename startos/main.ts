@@ -26,6 +26,27 @@ import { electrumPort, stdoutLines } from './utils'
 export const main = sdk.setupMain(async ({ effects }) => {
   console.info(i18n('Starting Frigate...'))
 
+  // An older Bitcoin lacks the public volume, and mounting a missing volume fails the start.
+  const hasRpcVolume = await sdk
+    .getServiceManifest(effects, 'bitcoind', (m) =>
+      m?.volumes.includes(rpcVolumeId),
+    )
+    .const()
+  if (hasRpcVolume === false) {
+    return sdk.Daemons.of(effects).addHealthCheck('bitcoin', {
+      ready: {
+        display: i18n('Bitcoin Connection'),
+        trigger: sdk.trigger.onceTrigger,
+        gracePeriod: 0,
+        fn: () => ({
+          result: 'failure',
+          message: i18n('Update Bitcoin so Frigate can connect to it'),
+        }),
+      },
+      requires: [],
+    })
+  }
+
   // Watch only user-controlled settings. Address rewrites below do not restart
   // main unless the selected provider or its assigned bridge port changes.
   await config.read(({ index, scan }) => ({ index, scan })).const(effects)

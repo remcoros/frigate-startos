@@ -24,6 +24,8 @@ Frigate 1.6 adds limits that protect a public Electrum server from too many conn
 4. **Wait for the first index.** This takes hours, sometimes days, depending on your start height and hardware. Frigate's Electrum address does not accept connections until it is done — watch **Sync Progress** for the block it has reached.
 5. **Connect your wallet** to Frigate's Electrum address.
 
+If Frigate's **Bitcoin Connection** check asks you to update Bitcoin, install Bitcoin's update; Frigate starts on its own once it is done.
+
 ## Choosing a start height
 
 Frigate only finds Silent Payments made at or after the block it starts indexing from. The default here is **840000**, which covers every practical Silent Payments wallet and keeps the first index to a reasonable length.

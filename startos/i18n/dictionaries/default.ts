@@ -7,6 +7,8 @@ const dict = {
   'Frigate is syncing...': 3,
   'Sync Progress': 4,
   'Fully synced': 6,
+  'Bitcoin Connection': 7,
+  'Update Bitcoin so Frigate can connect to it': 8,
 
   // interfaces.ts
   'Electrum (SSL)': 100,

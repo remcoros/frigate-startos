@@ -3,18 +3,18 @@ import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 export const FRIGATE_VERSION = '1.6.1'
 
 export const current = VersionInfo.of({
-  version: '1.6.1:6',
+  version: '1.6.1:7',
   releaseNotes: {
     en_US:
-      "Frigate now reads only the RPC credential Bitcoin publishes for connected services, instead of Bitcoin's whole data directory. Requires an up-to-date Bitcoin; update Bitcoin first if StartOS reports it as out of range.",
+      'With a Bitcoin too old to publish the RPC credential Frigate reads, Frigate no longer fails to start: it waits and tells you to update Bitcoin.',
     es_ES:
-      'Frigate ahora solo lee la credencial RPC que Bitcoin publica para los servicios conectados, en lugar de todo el directorio de datos de Bitcoin. Requiere una versión actualizada de Bitcoin; si StartOS indica que está fuera de rango, actualice Bitcoin primero.',
+      'Con un Bitcoin demasiado antiguo para publicar la credencial RPC que Frigate lee, Frigate ya no falla al iniciarse: espera y le indica que actualice Bitcoin.',
     de_DE:
-      'Frigate liest jetzt nur noch die RPC-Zugangsdaten, die Bitcoin für verbundene Dienste bereitstellt, statt des gesamten Bitcoin-Datenverzeichnisses. Erfordert ein aktuelles Bitcoin; meldet StartOS die Version als außerhalb des Bereichs, aktualisieren Sie zuerst Bitcoin.',
+      'Mit einem Bitcoin, das zu alt ist, um die von Frigate gelesenen RPC-Zugangsdaten bereitzustellen, startet Frigate nicht mehr fehlerhaft: Es wartet und fordert Sie auf, Bitcoin zu aktualisieren.',
     pl_PL:
-      'Frigate odczytuje teraz tylko dane uwierzytelniające RPC, które Bitcoin udostępnia połączonym usługom, zamiast całego katalogu danych Bitcoin. Wymaga aktualnej wersji Bitcoin; jeśli StartOS zgłasza ją jako spoza zakresu, najpierw zaktualizuj Bitcoin.',
+      'Gdy Bitcoin jest zbyt stary, by udostępniać dane uwierzytelniające RPC odczytywane przez Frigate, Frigate nie kończy już uruchamiania błędem: czeka i prosi o aktualizację Bitcoina.',
     fr_FR:
-      "Frigate ne lit plus que l'identifiant RPC que Bitcoin publie pour les services connectés, au lieu de tout le répertoire de données de Bitcoin. Nécessite une version à jour de Bitcoin ; si StartOS la signale hors plage, mettez d'abord Bitcoin à jour.",
+      "Avec un Bitcoin trop ancien pour publier l'identifiant RPC que Frigate lit, Frigate n'échoue plus au démarrage : il attend et vous invite à mettre Bitcoin à jour.",
   },
   migrations: {
     up: async () => {},
