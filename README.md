@@ -75,7 +75,7 @@ One volume, holding the config, the index, and the package's own record of which
 | `db/frigate.duckdb` | The Silent Payments tweak index; rebuildable, excluded from backup |
 | `store.json`        | StartOS-side state: the selected Electrum backend                  |
 
-Bitcoin's data directory is also mounted, read-only, at `/root/.bitcoin`. Frigate reads only `.cookie` from it, for RPC authentication.
+Bitcoin's `public` volume is also mounted, read-only, at `/root/.bitcoin`. It holds only the copies Bitcoin publishes for dependents; Frigate reads `.cookie` from it, for RPC authentication.
 
 ## File Models
 
@@ -88,7 +88,7 @@ One model, `config.toml`, and the package owns roughly half of it. The other hal
 | `core.connect`                 | always `true`                                                       |
 | `core.server`                  | Bitcoin's RPC address, resolved live over the container bridge      |
 | `core.authType`                | always `COOKIE`                                                     |
-| `core.dataDir`                 | `/root/.bitcoin`, where Bitcoin's volume is mounted                 |
+| `core.dataDir`                 | `/root/.bitcoin`, where Bitcoin's `public` volume is mounted        |
 | `core.zmqSequenceEndpoint`     | Bitcoin's ZMQ sequence address, resolved live                       |
 | `server.tcp`                   | always `tcp://[::]:50001`, so the listener accepts IPv4 and IPv6    |
 | `server.backendElectrumServer` | the selected backend's address, or empty when none is selected      |
@@ -104,11 +104,11 @@ Any key the package does not name is left alone entirely, including the upstream
 
 Bitcoin is required; an Electrum backend is optional but strongly recommended.
 
-| Dependency | Required | Gated on health checks      | Why                                                                                                                                                                                                                       |
-| ---------- | -------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bitcoind` | Yes      | `bitcoind`, `sync-progress` | Supplies blocks over RPC and new-block events over ZMQ. Its data directory is mounted read-only at `/root/.bitcoin` for cookie authentication. Frigate needs an archival node with `txindex` and ZMQ enabled — see Tasks. |
-| `fulcrum`  | No       | `primary`, `sync-progress`  | Answers ordinary address lookups, which Frigate does not implement. Required only while it is the selected backend.                                                                                                       |
-| `electrs`  | No       | `electrs`, `sync`           | The same role as Fulcrum. Required only while it is the selected backend.                                                                                                                                                 |
+| Dependency | Required | Gated on health checks      | Why                                                                                                                                                                                                                        |
+| ---------- | -------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bitcoind` | Yes      | `bitcoind`, `sync-progress` | Supplies blocks over RPC and new-block events over ZMQ. Its `public` volume is mounted read-only at `/root/.bitcoin` for cookie authentication. Frigate needs an archival node with `txindex` and ZMQ enabled — see Tasks. |
+| `fulcrum`  | No       | `primary`, `sync-progress`  | Answers ordinary address lookups, which Frigate does not implement. Required only while it is the selected backend.                                                                                                        |
+| `electrs`  | No       | `electrs`, `sync`           | The same role as Fulcrum. Required only while it is the selected backend.                                                                                                                                                  |
 
 Only one backend is used at a time, and only the selected one becomes a dependency — selecting Fulcrum does not oblige a user who also has Electrs installed to keep it running. The backend's address is resolved from the running service on each start rather than hard-coded, so a reinstall or a reassigned port heals on the next restart.
 
@@ -208,7 +208,7 @@ startos_managed_env_vars:
   - NETWORK
   - JAVA_TOOL_OPTIONS
 dependencies:
-  - bitcoind # required; its volume is mounted read-only at /root/.bitcoin
+  - bitcoind # required; its public volume is mounted read-only at /root/.bitcoin
   - fulcrum # optional, recommended
   - electrs # optional
 interfaces:

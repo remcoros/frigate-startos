@@ -2,6 +2,7 @@ import { manifest as bitcoinManifest } from 'bitcoin-core-startos/startos/manife
 import {
   rpcHostId,
   rpcPort,
+  rpcVolumeId,
   zmqHostId,
   zmqPortTransaction,
 } from 'bitcoin-core-startos/startos/utils'
@@ -105,7 +106,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
       .mountDependency<typeof bitcoinManifest>({
         dependencyId: 'bitcoind',
         mountpoint: '/root/.bitcoin',
-        volumeId: 'main',
+        volumeId: rpcVolumeId,
         subpath: null,
         readonly: true,
       }),
